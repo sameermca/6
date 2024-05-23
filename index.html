@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
+  <style>
+    .hovereffect:hover {
+      transform: scale(1.1);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+  <div class="w-full text-gray-700 bg-sky-300 dark-mode:text-gray-200 dark-mode:bg-gray-500">
+    <div x-data="{ open: false }"
+      class="flex flex-col max-w-screen-xl mx-auto md:items-center md:justify-between md:flex-row  mobile-head"
+      style="height: 80px;">
+      <div class=" flex flex-row items-center justify-between">
+        <img src="./img/AEC_logo.png" alt="" class="logo-img" height="300px" width="200px">
+        <button class="md:hidden rounded-lg focus:outline-none focus:shadow-outline" @click="open = !open">
+          <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6 absolute icon" style="top:3 0px;">
+            <path x-show="!open" fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z"
+              clip-rule="evenodd"></path>
+            <path x-show="open" fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+      <nav :class="{'flex': open, 'hidden': !open}"
+        class="flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row dropdown-box ">
+        <a class="px-5 py-2 mt-2 text-sm font-semibold text-gray-900  rounded-lg dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+          href="./index.html">HOME</a>
+        <a class="px-5 py-2 mt-2 text-sm font-semibold text-gray-900  rounded-lg dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+          href="#">COURSES</a>
+        <div @click.away="open = false" class="relative" x-data="{ open: false }">
+          <button @click="open = !open"
+            class="flex flex-row items-center w-full px-1.5 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent text-left bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-800 md:w-auto md:inline md:mt-0  hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+            <span>LIVE CLASS</span>
+            <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+              class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+              <path fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+          <div x-show="open" x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="transform opacity-100 scale-100"
+            x-transition:leave-end="transform opacity-0 scale-95"
+            class="absolute drop-minibox right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+            <div class="px-2 py-2 bg-white  rounded-md shadow dark-mode:bg-gray-800">
+              <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                href="#">FULL STACK DEVELOPMENT PROGRAM</a>
+            </div>
+          </div>
+        </div>
+        <div @click.away="open = false" class="relative" x-data="{ open: false }">
+          <button @click="open = !open"
+            class="flex flex-row items-center w-full px-1.5 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent text-left bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-800 md:w-auto md:inline md:mt-0  hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+            <span>PRACTICE</span>
+            <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+              class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1 ">
+              <path fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+          <div x-show="open" x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="transform opacity-100 scale-100"
+            x-transition:leave-end="transform opacity-0 scale-95"
+            class="absolute drop-minibox right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+            <div class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-gray-800">
+              <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                href="#">BIM TECHNOLOGY</a>
+
+            </div>
+          </div>
+        </div>
+        <div @click.away="open = false" class="relative" x-data="{ open: false }">
+          <button @click="open = !open"
+            class="flex flex-row items-center w-full px-1.5 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent text-left bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-800 md:w-auto md:inline md:mt-0  hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+            <span class="z-10">RESOURCES</span>
+            <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+              class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+              <path fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+          <div x-show="open" x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="transform opacity-100 scale-100"
+            x-transition:leave-end="transform opacity-0 scale-95"
+            class="absolute drop-minibox right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+            <div class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-gray-800 drop-minibox">
+              <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                href="#">BLOGS</a>
+            </div>
+          </div>
+        </div>
+        <a class="px-5 py-2 mt-2 text-sm font-semibold text-gray-900  rounded-lg dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+          href="./franchise.html">FRANCHAISE</a>
+        <div @click.away="open = false" class="relative" x-data="{ open: false }">
+          <button @click="open = !open"
+            class="flex flex-row items-center w-full px-1.5 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent text-left bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-800 md:w-auto md:inline md:mt-0  hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+            <span>OUR SOLUTIONS</span>
+            <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}"
+              class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
+              <path fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+          <div x-show="open" x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="transform opacity-100 scale-100"
+            x-transition:leave-end="transform opacity-0 scale-95"
+            class="absolute drop-minibox right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+            <div class="px-2 py-2 bg-white rounded-md shadow dark-mode:bg-gray-800 ">
+              <a class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                href="#">PLACEMENT PREPARATION</a>
+            </div>
+          </div>
+        </div>
+        <a class="px-5 py-2 mt-2 text-sm font-semibold text-gray-900  rounded-lg dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+          href="contact.html">CONTACT US</a>
+
+        <!-- Login toggle -->
+        <a href="#" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" id="openLoginBtn"
+          class="px-5 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0  hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">LOGIN/SIGN
+          UP</a>
+
+
+        <!-- Login modal -->
+
+
+        <div id="loginModal" class="modal">
+          <div class="modal-content">
+            <span id="closeLoginBtn" class="close-btn font-bold" style="height: 20px; width: 20px;">&times;</span>
+            <h2 class="text-2xl font-bold mb-4">Login Form</h2>
+            <!-- Your login form content goes here -->
+
+            <div class="p-4 md:p-5">
+              <form class="space-y-4" action="#">
+                <div>
+                  <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                  <input type="email" name="email" id="email"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="name@company.com" required>
+                </div>
+                <div>
+                  <label for="password"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                  <input type="password" name="password" id="password" placeholder="••••••••"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    required>
+                </div>
+                <div class="flex justify-between">
+                  <div class="flex items-start">
+                    <div class="flex items-center h-5">
+                      <input id="remember" type="checkbox" value=""
+                        class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                        required>
+                    </div>
+                    <label for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember
+                      me</label>
+                  </div>
+                  <a href="#" class="text-sm text-blue-700 hover:underline dark:text-blue-500">Forgot Password?</a>
+                </div>
+                <button type="submit"
+                  class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login
+                  to your account</button>
+                <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
+                  Not registered? <a href="#" data-modal-target="register-modal" data-modal-toggle="register-modal"
+                    id="openCreateAccountBtn" class="text-blue-700 hover:underline dark:text-blue-500">Create
+                    account</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create Account Form -->
+        <div id="createAccountModal" class="modal">
+          <div class="modal-content">
+            <span id="closeCreateAccountBtn" class="close-btn">&times;</span>
+            <h2 class="text-2xl font-bold mb-4">Create Account Form</h2>
+            <!-- Your create account form content goes here -->
+            <form>
+              <!-- Your login form fields go here -->
+              <div>
+                <label for="register-name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                <input type="text" name="name" id="name"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Name" required>
+              </div>
+              <div>
+                <label for="register-phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone
+                  Number</label>
+                <input type="tel" name="phone" id="phone"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Phone Number" required>
+              </div>
+              <div>
+                <label for="register-email"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                <input type="email" name="email" id="email"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="name@company.com" required>
+              </div>
+              <div>
+                <label for="register-password"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose a Password</label>
+                <input type="password" name="register-password" id="register-password" placeholder="••••••••"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  required>
+              </div>
+              <div>
+                <label for="confirm-password"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+                <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white pb-4"
+                  required>
+              </div>
+              <button type="submit"
+                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 p-4">Create
+                account</button>
+
+            </form>
+          </div>
+        </div>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const openLoginBtn = document.getElementById('openLoginBtn');
+            const loginModal = document.getElementById('loginModal');
+            const closeLoginBtn = document.getElementById('closeLoginBtn');
+            const openCreateAccountBtn = document.getElementById('openCreateAccountBtn');
+            const createAccountModal = document.getElementById('createAccountModal');
+            const closeCreateAccountBtn = document.getElementById('closeCreateAccountBtn');
+
+            openLoginBtn.addEventListener('click', function () {
+              loginModal.style.display = 'block';
+            });
+
+            closeLoginBtn.addEventListener('click', function () {
+              loginModal.style.display = 'none';
+            });
+
+            openCreateAccountBtn.addEventListener('click', function () {
+              loginModal.style.display = 'none';
+              createAccountModal.style.display = 'block';
+            });
+
+            closeCreateAccountBtn.addEventListener('click', function () {
+              createAccountModal.style.display = 'none';
+            });
+          });
+
+          registerModal.addEventListener('click', (event) => {
+            if (event.target === registerModal) {
+              registerModal.classList.add('hidden');
+              registerModal.classList.remove('flex');
+            }
+          });
+        </script>
+
+        <!-- Register page popup -->
+        <div id="register-modal" tabindex="-1" aria-hidden="true"
+          class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+          <div class="relative p-4 w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <!-- Modal header -->
+              <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                  Create an account
+                </h3>
+                <button type="button"
+                  class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-modal-hide="register-modal">
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+                </button>
+              </div>
+              <!-- Modal body -->
+              <div class="p-4 md:p-5">
+                <form id="registrationForm" class="space-y-4" action="#" onsubmit="return validateRegistrationForm()">
+                  <div>
+                    <label for="register-name"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                    <input type="text" name="name" id="name"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      placeholder="Name" required>
+                  </div>
+                  <div>
+                    <label for="register-phone"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
+                    <input type="tel" name="phone" id="phone"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      placeholder="Phone Number" required>
+                  </div>
+                  <div>
+                    <label for="register-email"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                    <input type="email" name="email" id="email"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      placeholder="name@company.com" required>
+                  </div>
+                  <div>
+                    <label for="register-password"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose a Password</label>
+                    <input type="password" name="register-password" id="register-password" placeholder="••••••••"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      required>
+                  </div>
+                  <div>
+                    <label for="confirm-password"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+                    <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      required>
+                  </div>
+                  <button type="submit"
+                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create
+                    account</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+
+    <img src="./img/architectural-blueprints.jpg" alt="Full Width Image"
+      class="w-auto md:w-full h-[250px] md:h-[500px]">
+
+  </div>
+  <br>
+  <div class=" bg-gray-200 h-95">
+    <h1 class=" text-[10px] text-center font-bold md:text-3xl" style="color: black; padding-top: 25px;">CADD Centre:
+      Pioneering
+      Edtech Transformation
+      for Over 35 Years</h1>
+    <p class="md:text-center text-[10px] md:text-2xl text-center">Bridging Learning and Careers</p>
+
+    <!-- Main Content -->
+    <div class="container mx-auto mt-8 flex text-center bg-gray-200">
+
+      <!-- Cards on the left side -->
+      <div class="w-1/2 pr-4">
+        <!-- First row of cards -->
+        <div class="flex mb-4">
+          <div class="w-1/2 pr-2">
+            <div class="md:bg-white  ring-2 ring-blue-500 rounded-lg p-2 shadow-md h-15 md:h-20 ">
+              <!-- Card Content for the first card -->
+              <h1 class="font-bold md:text-xl text-[10px]">2M+</h1>
+              <p class="font-bold  text-[8px] md:text-[15px]">Engineers and
+                Professionals trained</p>
+            </div>
+          </div>
+          <div class="w-1/2 pl-2">
+            <div class="md:bg-white ring-2 ring-blue-500 rounded-lg p-2 shadow-md h-15 md:h-20">
+              <!-- Card Content for the second card -->
+              <h1 class="font-bold md:text-xl text-[10px]">700</h1>
+              <p class="font-bold  text-[8px] md:text-[15px]">Training centres -
+                Asia's biggest network</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Second row of cards -->
+        <div class="flex">
+          <div class="w-1/2 pr-2">
+            <div class="md:bg-white ring-2 ring-blue-500 rounded-lg p-2 shadow-md h-15 md:h-20">
+              <!-- Card Content for the third card -->
+              <h1 class="font-bold md:text-xl text-[10px]">24</h1>
+              <p class="font-bold  text-[8px] md:text-[15px]">global
+                locations</p>
+            </div>
+          </div>
+          <div class="w-1/2 pl-2">
+            <div class="md:bg-white ring-2 ring-blue-500 rounded-lg p-2 shadow-md h-15 md:h-20 ">
+              <!-- Card Content for the fourth card -->
+              <h1 class="font-bold md:text-xl text-[10px]">100+</h1>
+              <p class="font-bold  text-[8px] md:text-[15px]">industry-ready
+                courses</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content on the right side -->
+      <div class="w-3/4">
+        <!-- Main Content Goes Here -->
+
+        <div class="mt-1">
+          <p class=" text-[8px] md:text-base font-bold text-justify">
+            For over three decades, CADD Centre has been a trusted institution, enriching the careers of over 2.5
+            million learners worldwide with cutting-edge courses. Our recent launch of Electric Vehicle Technology and
+            Generative AI job role-based courses underscores our dedication to preparing youth for a sustainable future.
+          </p><br>
+          <p class=" text-[8px] md:text-base font-bold text-justify">Renowned for hosting Job Pakka Fair 2023, India's
+            largest talent search,
+            offering 15,000
+            job openings across diverse cities and industries. With 40,000 students registered and 8,000 already on
+            their path to dream careers, our legacy of transformation and empowerment thrives.</p>
+        </div>
+      </div>
+    </div>
+    <br>
+  </div>
+  <div class="container-fluid">
+    <h1 class=" text-[13px] text-center font-bold md:text-3xl" style="color: black; margin-top: 10px;">Top
+      Certifications Courses
+      in Product Design</h1>
+    <section class="text-gray-600 body-font">
+      <div class="container px-5 py-15 mx-auto" style="margin-top: 20px;">
+        <div class="flex flex-wrap -m-4">
+          <div class="p-4 md:w-1/4">
+            <div class="md:h-full hovereffect border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+              <img class="lg:h-48 md:h-36 w-full object-cover object-center"
+                src="./img/augmented-reality-composition-with-computer-generated-perceptual-information.jpg" alt="blog">
+              <div class="p-6">
+                <!-- <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">CATEGORY</h2> -->
+                <h1 class="title-font md:text-lg font-medium text-gray-900 mb-3 ">The Catalyzer</h1>
+                <p class="leading-relaxed mb-3">There are four primary drivers of demand for AEC services worldwide:
+                  petroleum prices, political risk, population growth, and urbanization. Other factors that affect
+                  demand include economic growth.</p>
+                <div class="flex items-center flex-wrap ">
+                  <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                    <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <span
+                    class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>1.2K
+                  </span>
+                  <span class="text-gray-400 inline-flex items-center leading-none text-sm">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z">
+                      </path>
+                    </svg>6
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 md:w-1/4">
+            <div class="h-full hovereffect border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+              <img class="lg:h-48 md:h-36 w-full object-cover object-center"
+                src="./img/square-rectangle-box-banner-emblem-graphic.jpg" alt="blog">
+              <div class="p-6">
+                <!-- <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">CATEGORY</h2> -->
+                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">The 400 Blows</h1>
+                <p class="leading-relaxed mb-3">The Architecture, Engineering, and Construction (AEC) services sector
+                  provides a host of services surrounding the planning and building of commercial and residential
+                  projects.</p>
+                <div class="flex items-center flex-wrap">
+                  <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                    <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <span
+                    class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>1.2K
+                  </span>
+                  <span class="text-gray-400 inline-flex items-center leading-none text-sm">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z">
+                      </path>
+                    </svg>6
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 md:w-1/4">
+            <div class="h-full hovereffect border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+              <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="./img/light-trails-buildings.jpg"
+                alt="blog">
+              <div class="p-6">
+                <!-- <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">CATEGORY</h2> -->
+                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Shooting Stars</h1>
+                <p class="leading-relaxed mb-3">There are several AEC sub-sectors that focus on specific types of design
+                  and construction projects, including: transportation/infrastructure, health care,industrial, and
+                  entertainment .</p>
+                <div class="flex items-center flex-wrap ">
+                  <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                    <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <span
+                    class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>1.2K
+                  </span>
+                  <span class="text-gray-400 inline-flex items-center leading-none text-sm">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z">
+                      </path>
+                    </svg>6
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 md:w-1/4">
+            <div class="h-full hovereffect border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+              <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="./img/network-3664108_640.jpg"
+                alt="blog">
+              <div class="p-6">
+                <!-- <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">CATEGORY</h2> -->
+                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Shooting Stars</h1>
+                <p class="leading-relaxed mb-3"> Other market access barriers include nationality requirements for
+                  certified AEC professionals and restrictions on movement of professional personnel under a country’s
+                  immigration laws.</p>
+                <div class="flex items-center flex-wrap ">
+                  <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                    <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <span
+                    class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>1.2K
+                  </span>
+                  <span class="text-gray-400 inline-flex items-center leading-none text-sm">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z">
+                      </path>
+                    </svg>6
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="container-fluid">
+    <h1 class="text-center font-bold md:text-2xl text-[15px]" style="color: black; margin-top: 10px;">Trending AEC
+      Certification
+      Courses</h1>
+    <section class="text-gray-600 body-font">
+      <div class="container px-5 py-15 mx-auto" style="margin-top: 20px;">
+        <div class="flex flex-wrap -m-4">
+          <div class="p-4 md:w-1/4">
+            <div class="h-full hovereffect border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+              <img class="lg:h-48 md:h-36 w-full object-cover object-center"
+                src="./img/construction-concept-with-engineering-tools.jpg" alt="blog">
+              <div class="p-6">
+                <!-- <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">CATEGORY</h2> -->
+                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">The Catalyzer</h1>
+                <p class="leading-relaxed mb-3"> In order to address this requirement, U.S. firms choose to
+                  hire/contract with a local professional, but if this is not an option, other arrangements might be
+                  made on a case-by-case basis.</p>
+                <div class="flex items-center flex-wrap ">
+                  <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                    <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <span
+                    class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>1.2K
+                  </span>
+                  <span class="text-gray-400 inline-flex items-center leading-none text-sm">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z">
+                      </path>
+                    </svg>6
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 md:w-1/4">
+            <div class="h-full hovereffect border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+              <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="./img/29121321_4963.jpg" alt="blog">
+              <div class="p-6">
+                <!-- <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">CATEGORY</h2> -->
+                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">The 400 Blows</h1>
+                <p class="leading-relaxed mb-3">Similar to other professional services sectors, the barriers facing AEC
+                  service providers in foreign markets are typically regulatory in nature. In many instances, foreign
+                  countries have professional.</p>
+                <div class="flex items-center flex-wrap">
+                  <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                    <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <span
+                    class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>1.2K
+                  </span>
+                  <span class="text-gray-400 inline-flex items-center leading-none text-sm">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z">
+                      </path>
+                    </svg>6
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 md:w-1/4">
+            <div class="h-full hovereffect border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+              <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="./img/2150761166.jpg" alt="blog">
+              <div class="p-6">
+                <!-- <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">CATEGORY</h2> -->
+                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Shooting Stars</h1>
+                <p class="leading-relaxed mb-3">Depending on the sub-sector, the leading export markets for AEC services
+                  vary between regions. For example, in the architecture and engineering services sub-sectors.</p>
+                <div class="flex items-center flex-wrap ">
+                  <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                    <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <span
+                    class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>1.2K
+                  </span>
+                  <span class="text-gray-400 inline-flex items-center leading-none text-sm">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z">
+                      </path>
+                    </svg>6
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 md:w-1/4">
+            <div class="h-full hovereffect border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+              <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="./img/15433463_562.jpg" alt="blog">
+              <div class="p-6">
+                <!-- <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">CATEGORY</h2> -->
+                <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Shooting Stars</h1>
+                <p class="leading-relaxed mb-3">In the United States, the architecture and engineering services
+                  industries offer certifications that are regulated at the state level, while the various
+                  certifications available for construction professionals</p>
+                <div class="flex items-center flex-wrap ">
+                  <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                    <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                  <span
+                    class="text-gray-400 mr-3 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>1.2K
+                  </span>
+                  <span class="text-gray-400 inline-flex items-center leading-none text-sm">
+                    <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                      stroke-linejoin="round" viewBox="0 0 24 24">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z">
+                      </path>
+                    </svg>6
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="container-fluid">
+    <h1 class="text-center font-bold  md:text-2xl text-[18px]" style="color: black; margin-top: 10px;">Hear from our
+      students
+    </h1>
+    <section class="text-gray-600 body-font" style="background-color: gainsboro;">
+      <div class="container px-5 py-18 mx-auto flex flex-wrap" style="margin-top: 20px; margin-bottom: 20px;">
+        <div class="flex flex-wrap -mx-4 mt-auto mb-auto lg:w-1/2 sm:w-2/3 content-start sm:pr-10">
+          <div class="w-full sm:p-4 px-4 mb-6">
+            <h1 class="title-font font-medium md:text-2xl mb-2 text-black-500 text-[18px] ">Straight from our learners'
+              hearts!</h1>
+            <div class="leading-relaxed md:text-[17px] text-[13px]" style="color: black;">As a Business Development
+              Executive, you will be responsible for driving revenue growth by identifying, prospecting, and acquiring
+              new business opportunities. </div>
+          </div>
+        </div>
+        <div class="lg:w-1/2 sm:w-1/3 w-full rounded-lg overflow-hidden mt-3 sm:mt-0">
+          <img class="object-cover object-center w-full h-64" src="./img/engi.jpg" alt="stats">
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="container-fluid">
+    <h1 class="text-center font-bold  md:text-2xl text-[20px]" style="color: black; margin-top: 10px;">World class
+      training,
+      world
+      over.</h1>
+    <section class="text-gray-600 body-font">
+      <div class="container px-5 py-4 mx-auto">
+        <div class="flex flex-wrap m-4 text-center">
+          <div class="p-4 sm:w-1/4 w-1/2">
+            <h2 class="title-font font-medium sm:text-4xl md:text-3xl text-[20px]" style="color: black;">2.7K</h2>
+            <p class="leading-relaxed md:text-[20px] text-[15px]"><b>Users</p></b>
+          </div>
+          <div class="p-4 sm:w-1/4 w-1/2">
+            <h2 class="title-font font-medium sm:text-4xl md:text-3xl text-[20px]" style="color: black;">1.8K</h2>
+            <p class="leading-relaxed md:text-[20px] text-[15px]"><b>Subscribes</b></p>
+          </div>
+          <div class="p-4 sm:w-1/4 w-1/2">
+            <h2 class="title-font font-medium sm:text-4xl md:text-3xl text-[20px]" style="color: black;">35</h2>
+            <p class="leading-relaxed md:text-[20px] text-[15px]"><b>Downloads</b></p>
+          </div>
+          <div class="p-4 sm:w-1/4 w-1/2">
+            <h2 class="title-font font-medium sm:text-4xl md:text-3xl text-[20px]" style="color: black;">4</h2>
+            <p class="leading-relaxed md:text-[20px] text-[15px]"><b>Products</b></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="container-fluid">
+    <h1 class="text-center font-bold  md:text-2xl text-[20px]" style="color: black; margin-top: 0px;">CADD Divisions.
+    </h1>
+    <section class="text-gray-600 body-font">
+      <div class="container px-5 py-9 mx-auto">
+        <div class="flex flex-wrap m-2">
+          <div class="lg:w-1/3 hovereffect lg:mb-0 mb-6 p-4 bg-gray-200">
+            <div class="h-full text-center">
+              <img alt="testimonial"
+                class="w-20 h-20 mb-8 object-cover object-center rounded-full inline-block border-2 border-gray-200 bg-gray-100"
+                src="./img/959275_OF71Y00.jpg">
+              <h1 class="font-bold font-size-2xl" style="font-size: 25px;">CADD Centre Overseas</h1>
+              <p class="leading-relaxed">CAD training services
+                in Asia, Africa and the Middle East.</p>
+
+              <button
+                class="flex mx-auto mt-5 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Know
+                More</button>
+            </div>
+          </div>
+          <div class="lg:w-1/3 hovereffect lg:mb-0 mb-6 p-4 bg-red-500">
+            <div class="h-full text-center">
+              <img alt="testimonial"
+                class="w-20 h-20 mb-8 object-cover object-center rounded-full inline-block border-2 border-gray-200 bg-gray-100"
+                src="./img/hat-297099_640.png">
+              <h1 class="font-bold text-white font-size-2xl" style="font-size: 25px;">Customised training</h1>
+              <p class="leading-relaxed text-white">Tailor made training solutions
+                across disciplines.</p>
+
+              <button
+                class="flex mx-auto mt-5 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Know
+                More</button>
+            </div>
+          </div>
+          <div class="lg:w-1/3 hovereffect lg:mb-0 p-4 bg-gray-200">
+            <div class="h-full text-center">
+              <img alt="testimonial"
+                class="w-20 h-20 mb-8 object-cover object-center rounded-full inline-block border-2 border-gray-200 bg-gray-100"
+                src="./img/magnifying-glass-97588_640.png">
+              <h1 class="font-bold font-size-2xl" style="font-size: 25px;">Placement Services</h1>
+              <p class="leading-relaxed">We take ownership in assessing
+                students with right job.</p>
+              <button
+                class="flex mx-auto mt-5 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Know
+                More</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <hr class="bg-red-500 h-1">
+
+  <div class="google-map py-5">
+    <div class="flex justify-start items-center" style="padding-left: 1200px;">
+      <input type="search" placeholder="Search" class=" w-64 py-3 bg-gray-200 pl-4" style=" border-radius: 10px;">
+    </div>
+
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2990.274257380938!2d-70.56068388481569!3d41.45496659976631!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e52963ac45bbcb%3A0xf05e8d125e82af10!2sDos%20Mas!5e0!3m2!1sen!2sus!4v1671220374408!5m2!1sen!2sus"
+      width="100%" height="450" style="border:0; padding-top: 4px;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+
+  <hr class="bg-red-500 h-1">
+  <div>
+    <footer class="text-gray-600 body-font">
+      <div
+        class="container px-5 py-15 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col"
+        style="margin-top:50px; margin-bottom: 50px;">
+        <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
+          <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+            <img src="./img/AEC_logo.png" alt="">
+          </a>
+          <p class="mt-2 text-sm text-center text-gray-500">Air plant banjo lyft occupy retro adaptogen indego</p>
+        </div>
+        <div class="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center text-justify">
+          <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+            <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 font-bold text-xl ">Company</h2>
+            <nav class="list-none mb-10">
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">About Us</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Customised Training</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Newsroom</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Job Fair</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Newsletter</a>
+              </li>
+            </nav>
+          </div>
+          <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+            <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 font-bold text-xl">Top Stream
+            </h2>
+            <nav class="list-none mb-10">
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Mechanical CADD</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Civil CADD</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Architectural CADD</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Electrical CADD</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Building Information Modeling</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Information Technology</a>
+              </li>
+            </nav>
+          </div>
+          <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+            <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 font-bold text-xl">
+              Certifications</h2>
+            <nav class="list-none mb-10">
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Proficient Certificate</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Masters Certificate</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Expert Certificate</a>
+              </li>
+
+            </nav>
+          </div>
+          <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+            <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 font-bold text-xl">
+              Mechanical</h2>
+            <nav class="list-none mb-10">
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">AutoCAD Mechanical</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">ANSYS</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">CREO</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-gray-800">NX CAD</a>
+              </li>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <hr class="bg-red-500 h-1">
+  <footer class="text-gray-600 body-font">
+    <div
+      class="container px-5 py-15 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col mt-8 mb-9">
+      <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
+        <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+          <img src="./img/AEC_logo.png" alt="">
+        </a>
+        <p class="mt-2 text-sm text-center text-gray-500">Air plant banjo lyft occupy retro adaptogen indego</p>
+      </div>
+      <div class="flex-grow flex flex-wrap  -mb-10 md:text-left text-center text-justify order-first">
+        <div class="lg:w-1/5 md:w-1/2 w-full px-4">
+          <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 font-bold text-xl ">IT-Technologys
+          </h2>
+          <nav class="list-none mb-10">
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">C</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">C++</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800"> Python</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Java</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Ethical Hacking</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Microsoft Office With PPM</a>
+            </li>
+          </nav>
+        </div>
+        <div class="lg:w-1/5 md:w-1/3 w-full px-4">
+          <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 font-bold text-xl">Engineering
+          </h2>
+          <nav class="list-none mb-10">
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">AutoCAD Electrical
+                AutoCAD Civil</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">3Ds Max (Max for Engineers)</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">5D BIM Using Navisworks</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Revit Architecture</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">SketchUp</a>
+            </li>
+          </nav>
+        </div>
+        <div class="lg:w-1/5 md:w-1/2 w-full px-4">
+          <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 font-bold text-xl">Hybrid</h2>
+          <nav class="list-none mb-10">
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">AutoCAD 3D</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">3D Prinintg</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Autodesk Inventor</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Ansys Workbench</a>
+            </li>
+          </nav>
+        </div>
+        <div class="lg:w-1/5 md:w-1/2 w-full px-4">
+          <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 font-bold text-xl">
+            Support</h2>
+          <nav class="list-none mb-10">
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Feedback</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Customer Support</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Business Enquiry</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">General Contact</a>
+            </li>
+          </nav>
+        </div>
+        <div class="lg:w-1/5 md:w-1/2 w-full px-4">
+          <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 font-bold text-xl">
+            Community&Events
+          </h2>
+          <nav class="list-none mb-10">
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Engineering, Technology & Careers (ETC)</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-600 hover:text-gray-800">Imagineer</a>
+            </li>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="bg-slate-500">
+      <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+        <p class="text-white text-sm text-center sm:text-left px-20 p-2">© 2020 Tailblocks —
+          <a href="https://twitter.com/knyttneve" rel="noopener noreferrer" class="text-white ml-1"
+            target="_blank">@knyttneve</a>
+        </p>
+        <span class="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start p-2">
+          <a class="text-white">
+            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5"
+              viewBox="0 0 24 24">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-white">
+            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5"
+              viewBox="0 0 24 24">
+              <path
+                d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+              </path>
+            </svg>
+          </a>
+          <a class="ml-3 text-white">
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              class="w-5 h-5" viewBox="0 0 24 24">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-white">
+            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+              <path stroke="none"
+                d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+              <circle cx="4" cy="4" r="2" stroke="none"></circle>
+            </svg>
+          </a>
+        </span>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js"></script>
+
+</body>
+
+</html>
